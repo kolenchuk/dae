@@ -1,0 +1,7 @@
+{
+    "file_paths": {
+        "weights": "weights.pth",
+        "config": "config.json",
+        "metadata": "metadata.json"
+    }
+}

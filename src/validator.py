@@ -98,7 +98,6 @@ def analyze_error_distribution(results):
             corrected = result['corrected']
             expected = result['expected']
 
-            # Categorize error
             if len(corrected) != len(expected):
                 error_type = 'length_mismatch'
             elif all(c == 'p' for c in corrected):

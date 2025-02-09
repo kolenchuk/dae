@@ -4,10 +4,9 @@ from torch.utils.data import DataLoader
 import logging
 import os
 from src.dae_loss import DAELoss
-from text_dataset import TextDataset, pad_collate_fn
+from text_dataset import TextDataset
 from train_monitor import TrainingMonitor
 from warmup_cosine_scheduler import WarmupCosineScheduler
-import torch.nn.functional as F
 from collections import defaultdict
 from typing import Dict, Tuple, Any
 from model_save_utils import save_checkpoint_distributed
@@ -141,20 +140,6 @@ class DAETrainer:
     def save_checkpoint(self, save_dir: str, epoch: int, metrics: Dict):
         """Save model checkpoint."""
         os.makedirs(save_dir, exist_ok=True)
-        # checkpoint_path = os.path.join(save_dir, 'checkpoints', f'dae_checkpoint_epoch_{epoch}')
-        # save_checkpoint_distributed(
-        #     self.model,
-        #     checkpoint_path,
-        #     self.dataset.char_to_idx,
-        #     self.dataset.idx_to_char,
-        #     {
-        #         'epoch': epoch,
-        #         'metrics': metrics,
-        #         'scheduler_state': self.scheduler.state_dict(),
-        #         'vocab_size': self.dataset.vocab_size,
-        #         'optimizer': self.optimizer
-        #     }
-        # )
 
         if (metrics['combined_loss'] < self.best_val_loss):
             self.best_val_loss = metrics['combined_loss']
@@ -189,17 +174,14 @@ class DAETrainer:
 
     def _adjust_training_parameters(self, loss_components: Dict[str, float]):
         """Dynamically adjust training parameters based on loss components."""
-        # Adjust loss weights based on performance
         if loss_components['end_char_accuracy'] < 0.7:
             self.criterion.end_weight = min(5.0, self.criterion.end_weight * 1.1)
         elif loss_components['end_char_accuracy'] > 0.9:
             self.criterion.end_weight = max(1.0, self.criterion.end_weight * 0.9)
 
-        # Adjust learning rate based on n-gram loss
         if loss_components['char_ngram_loss'] > 0.5:
             for param_group in self.optimizer.param_groups:
                 param_group['lr'] *= 0.95
 
-        # Update char_weight based on overall accuracy
         if loss_components['char_accuracy'] < 0.8:
             self.criterion.char_weight = min(0.5, self.criterion.char_weight * 1.1)

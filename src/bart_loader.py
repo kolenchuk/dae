@@ -5,9 +5,8 @@ import json
 MODEL_DIR = "models/bart-base"
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-# Перевірка, чи модель уже завантажена
 if os.path.exists(os.path.join(MODEL_DIR, "model.safetensors")):
-    print(f"Модель BART уже завантажена у {MODEL_DIR}")
+    print(f"BART model already downloaded at {MODEL_DIR}")
 else:
     model = AutoModelForSeq2SeqLM.from_pretrained("facebook/bart-base")
     tokenizer = AutoTokenizer.from_pretrained("facebook/bart-base")
@@ -26,9 +25,8 @@ else:
     with open(os.path.join(MODEL_DIR, "generation_config.json"), "w") as f:
         json.dump(gen_config_dict, f)
 
-    # Зберігаємо модель і токенізатор
     model.save_pretrained(MODEL_DIR)
     tokenizer.save_pretrained(MODEL_DIR)
 
-    print(f"Модель BART збережена у {MODEL_DIR}")
+    print(f"BART model downloaded and saved at {MODEL_DIR}")
 

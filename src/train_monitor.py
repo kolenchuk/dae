@@ -37,12 +37,10 @@ class TrainingMonitor:
         self.current_epoch[f'{phase}_levenshtein'] += avg_lev
         self.current_epoch[f'{phase}_exact_matches'] += exact_matches
 
-        # Error analysis metrics
         error_types = self.analyze_errors(pred_texts, target_texts)
         for error_type, count in error_types.items():
             self.current_epoch[f'{phase}_{error_type}'] += count
 
-        # Edit distance statistics
         self.num_batches += 1
 
     def log_gradients(self):
@@ -67,7 +65,6 @@ class TrainingMonitor:
             avg_value = self.current_epoch[key] / self.num_batches
             self.epoch_metrics[key].append(avg_value)
 
-        # Reset accumulators
         self.current_epoch.clear()
         self.num_batches = 0
 

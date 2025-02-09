@@ -13,15 +13,13 @@ logger = logging.getLogger(__name__)
 
 def main():
     config = {
-        # Model architecture
-        'd_model': 256,         # Increased to learn better patterns
-        'num_heads': 8,         # More heads for better attention
-        'num_layers': 4,        # Deeper model for complex transformations
-        'd_ff': 1024,          # Larger feed-forward for better capacity
-        'dropout': 0.1,        # Keep same dropout
+        'd_model': 256,
+        'num_heads': 8,
+        'num_layers': 4,
+        'd_ff': 1024,
+        'dropout': 0.1,
         'max_len': 20,
 
-        # Training parameters
         'learning_rate': 2e-4,
         'label_smoothing': 0.05,
         'warmup_steps': 200,
@@ -31,10 +29,6 @@ def main():
         'max_grad_norm': 1.0,
         'use_amp': True,
 
-        # Loss configuration
-        'ctc_weight': 0.0,
-
-        # Paths
         'save_dir': '../models',
         'dataset_path': '../data/dae_dataset.csv',
         'log_interval': 10,
@@ -49,7 +43,6 @@ def main():
             'warmup_steps': 100
         },
 
-        # Learning rate schedule
         'lr_schedule': {
             'warmup_steps': 200,
             'decay_factor': 0.98,
@@ -87,10 +80,10 @@ def main():
 
     model = DAE(
         vocab_size=dataset.vocab_size,
-        d_model=config['d_model'],  # Now 128
-        num_heads=config['num_heads'],  # Now 4
-        num_layers=config['num_layers'],  # Now 3
-        d_ff=config['d_ff'],  # Now 512
+        d_model=config['d_model'],
+        num_heads=config['num_heads'],
+        num_layers=config['num_layers'],
+        d_ff=config['d_ff'],
         dropout=config['dropout'],
         pad_idx=config['pad_idx'],
         max_len=config['max_len']

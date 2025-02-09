@@ -40,8 +40,6 @@ def pad_collate_fn(batch):
 
 
 class TextDataset(Dataset):
-    """Dataset for text correction task"""
-
     def __init__(self, csv_file: str, max_length: int = 100):
         """
         Initialize dataset.

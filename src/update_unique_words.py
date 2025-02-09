@@ -15,5 +15,3 @@ new_words = phone_words - unique_words
 with open(unique_words_path, 'a') as file:
     for word in sorted(new_words):
         file.write(f"{word}\n")
-
-print(f"До файлу {unique_words_path} додано {len(new_words)} нових слів.")

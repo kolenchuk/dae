@@ -30,10 +30,4 @@ def indices_to_text(indices, idx_to_char):
         0, #<PAD>
         1, #<EOS>
     }
-    #print(idx_to_char)
     return ''.join([idx_to_char.get(str(idx), '') for idx in indices if idx not in special_tokens])
-    # return "".join([
-    #     idx_to_char[idx]
-    #     for idx in indices
-    #     if idx not in special_tokens and idx in idx_to_char
-    # ])

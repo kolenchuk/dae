@@ -13,7 +13,6 @@ import logging
 from src.text_utils import text_to_indices, indices_to_text
 
 from src.model_save_utils import load_checkpoint_distributed
-from src.text_dataset import TextDataset
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -24,7 +23,6 @@ def load_smartphone_models(filepath):
     df = pd.read_csv(filepath)
     return df['model'].str.lower().tolist()
 
-# Завантаження словника слів
 with open("./data/unique_words.txt", "r", encoding="utf-8") as f:
     DICTIONARY = set(word.strip().lower() for word in f.readlines())
 
@@ -42,7 +40,6 @@ model.eval()
 
 BART_MODEL_DIR = "./models/bart-base"
 
-# Завантажуємо кастомну генераційну конфігурацію
 gen_config_path = os.path.join(BART_MODEL_DIR, "generation_config.json")
 with open(gen_config_path, "r") as f:
     gen_config_dict = json.load(f)
@@ -66,7 +63,6 @@ def correct_word(word: str) -> str:
         return word  # Не змінюємо
     else:
         with torch.no_grad():
-            # Перетворюємо слово у вхідний формат моделі
             indices = text_to_indices(word, CHAR_TO_IDX)
             input_tensor = torch.tensor([indices], device=DEVICE)
             output_tensor = model(input_tensor)

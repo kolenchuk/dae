@@ -1,36 +1,35 @@
-# PyTorch Project
+# Denoising autoencoder 
+DAE для автоматичного виправлення граматичних помилок у пошукових запитах користувачів на e-commerce сайті
 
-A PyTorch-based project for implementing a denoising autoencoder for text error correction.
+проєкт розроблений за допомогою PyTorch
 
-## Installation
+## Інсталяція
 
-1. Clone the repository:
+1. Клонуйте репозиторій:
 ```bash
 git clone https://github.com/kolenchuk/dae
 cd dae
 
-# Create virtual environment
+# Створіть віртуальне середовище
 python -m venv pytorch_env
 
-# Activate virtual environment
-# On Windows:
+# Активуйте віртуальне середовище
+# На Windows:
 pytorch_env\Scripts\activate
-# On Unix or MacOS:
+# На Unix чи MacOS:
 source pytorch_env/bin/activate
 
 pip install -r requirements.txt
 
-project/
-│
-├── data/                 # Dataset files
-├── models/              # Saved models
+dae/
+├── data/               # Dataset files
+├── models/             # Saved models
+├── reports/            # Validation reports
 ├── src/                # Source code
-│   ├── __init__.py
-│   ├── data_loader.py
-│   ├── model.py
-│   └── train.py
-├── notebooks/          # Jupyter notebooks
 ├── requirements.txt    # Project dependencies
+├── app.py              # Скрипт запуску апі
+├── Dockerfile          #
+├── docker-compose.yaml #
 └── README.md
 
 
@@ -38,16 +37,3 @@ This README.md includes:
 - Clear installation instructions
 - Project structure
 - Requirements
-- PyCharm setup instructions
-- Basic sections for usage, license, and contact information
-
-You can customize it further by:
-- Adding specific usage examples
-- Including any configuration steps
-- Adding badges (build status, version, etc.)
-- Including contribution guidelines
-- Adding more detailed documentation
-
-
-
-

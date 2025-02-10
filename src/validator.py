@@ -1,132 +1,369 @@
 import torch
-import logging
-from model_validator import ModelValidator
-from src.model_save_utils import load_checkpoint_distributed
-from text_dataset import TextDataset, pad_collate_fn
-from dae import DAE
 from collections import defaultdict
+from typing import Dict, List, Tuple, Optional
+import matplotlib.pyplot as plt
 from Levenshtein import distance as levenshtein_distance
-import torch.nn.functional as F
-from torch.utils.data import DataLoader
-from tqdm import tqdm
-import json
-from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
-
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
+import logging
+import os
+import pandas as pd
+import seaborn as sns
+from dae import DAE
+from model_save_utils import load_checkpoint_distributed
+from text_dataset import TextDataset, pad_collate_fn
 
 
-def validate_model(model, val_loader, dataset, device="cuda"):
+def validate_curriculum_model(
+        model: torch.nn.Module,
+        datasets: Dict[str, torch.utils.data.Dataset],
+        batch_size: int = 64,
+        device: str = "cuda",
+        save_dir: Optional[str] = None
+) -> Dict[str, Dict]:
     """
-    Функція для перевірки якості навчання моделі на валідаційному наборі.
+    Validate the model separately on each difficulty level
 
-    - `model`: нейромережа (DAE)
-    - `val_loader`: DataLoader для валідаційного набору
-    - `dataset`: об'єкт dataset для конвертації індексів у текст
-    - `device`: 'cuda' або 'cpu'
+    Args:
+        model: The DAE model
+        datasets: Dictionary mapping difficulty levels to datasets
+        batch_size: Batch size for validation
+        device: Device to run validation on
+        save_dir: Directory to save validation results
+
+    Returns:
+        Dictionary containing validation metrics for each difficulty level
     """
-
     model.eval()
-    total_levenshtein = 0
-    total_bleu = 0
-    total_correct = 0
-    total_samples = 0
-    smoother = SmoothingFunction().method1
+    results = {}
 
-    results = []
+    for difficulty, dataset in datasets.items():
+        logging.info(f"Validating on {difficulty} difficulty")
+
+        val_loader = torch.utils.data.DataLoader(
+            dataset,
+            batch_size=batch_size,
+            shuffle=False,
+            collate_fn=pad_collate_fn
+        )
+
+        # Get metrics for this difficulty level
+        metrics, error_dist, (predictions, targets) = validate_model(
+            model, val_loader, dataset, device
+        )
+
+        # Analyze errors for this difficulty level
+        error_analysis, error_details = analyze_error_distribution(
+            predictions, targets,
+            save_dir=os.path.join(save_dir, difficulty) if save_dir else None
+        )
+
+        results[difficulty] = {
+            'metrics': metrics,
+            'error_distribution': error_analysis,
+            'error_details': error_details,
+            'predictions': predictions,
+            'targets': targets
+        }
+
+    if save_dir:
+        save_curriculum_results(results, save_dir)
+        plot_curriculum_comparisons(results, save_dir)
+
+    return results
+
+
+def save_curriculum_results(results: Dict, save_dir: str):
+    """Save detailed curriculum validation results"""
+    os.makedirs(save_dir, exist_ok=True)
+
+    # Save overall metrics comparison
+    metrics_comparison = {
+        difficulty: result['metrics']
+        for difficulty, result in results.items()
+    }
+
+    pd.DataFrame(metrics_comparison).to_csv(
+        os.path.join(save_dir, 'metrics_comparison.csv')
+    )
+
+    # Save detailed results for each difficulty
+    for difficulty, result in results.items():
+        diff_dir = os.path.join(save_dir, difficulty)
+        os.makedirs(diff_dir, exist_ok=True)
+
+        # Save error distribution
+        pd.DataFrame(
+            result['error_distribution'].items(),
+            columns=['Error_Type', 'Percentage']
+        ).to_csv(os.path.join(diff_dir, 'error_distribution.csv'))
+
+        # Save prediction examples
+        save_prediction_examples(
+            result['predictions'],
+            result['targets'],
+            os.path.join(diff_dir, 'prediction_examples.txt')
+        )
+
+
+def plot_curriculum_comparisons(results: Dict, save_dir: str):
+    """Create comparative visualizations across difficulty levels"""
+    # Metrics comparison plot
+    plt.figure(figsize=(12, 6))
+    metrics_data = {
+        difficulty: result['metrics']
+        for difficulty, result in results.items()
+    }
+    df_metrics = pd.DataFrame(metrics_data).transpose()
+
+    sns.heatmap(
+        df_metrics,
+        annot=True,
+        fmt='.3f',
+        cmap='YlOrRd'
+    )
+    plt.title('Metrics Comparison Across Difficulty Levels')
+    plt.tight_layout()
+    plt.savefig(os.path.join(save_dir, 'metrics_comparison.png'))
+    plt.close()
+
+    # Error distribution comparison
+    plt.figure(figsize=(15, 6))
+    error_data = {
+        difficulty: result['error_distribution']
+        for difficulty, result in results.items()
+    }
+
+    # Convert to DataFrame for plotting
+    error_dfs = []
+    for difficulty, dist in error_data.items():
+        df = pd.DataFrame(dist.items(), columns=['Error_Type', 'Percentage'])
+        df['Difficulty'] = difficulty
+        error_dfs.append(df)
+
+    df_errors = pd.concat(error_dfs)
+
+    # Plot grouped bar chart
+    sns.barplot(
+        data=df_errors,
+        x='Error_Type',
+        y='Percentage',
+        hue='Difficulty'
+    )
+    plt.xticks(rotation=45, ha='right')
+    plt.title('Error Distribution Comparison')
+    plt.tight_layout()
+    plt.savefig(os.path.join(save_dir, 'error_distribution_comparison.png'))
+    plt.close()
+
+
+def validate_model(
+        model: torch.nn.Module,
+        val_loader: torch.utils.data.DataLoader,
+        dataset,
+        device: str = "cuda"
+) -> Tuple[Dict[str, float], Dict[str, int], Tuple[List[str], List[str]]]:
+    """
+    Validate the model using consistent metrics
+
+    Args:
+        model: The DAE model
+        val_loader: Validation data loader
+        dataset: TextDataset instance for decoding predictions
+        device: Device to run validation on
+
+    Returns:
+        Tuple of (metrics, error_distributions, (predictions, targets))
+    """
+    model.eval()
+    val_metrics = defaultdict(float)
+    num_batches = 0
+    all_predictions = []
+    all_targets = []
+    error_distributions = defaultdict(int)
 
     with torch.no_grad():
-        for noisy, clean in tqdm(val_loader, desc="Validating"):
+        for noisy, clean in val_loader:
             noisy, clean = noisy.to(device), clean.to(device)
 
+            # Get model predictions
             output = model(noisy)
-            output_probs = F.softmax(output / 1.0, dim=-1)
-            predictions = output_probs.argmax(dim=-1)
+            predictions = output.argmax(dim=-1)
 
-            noisy_texts = [dataset.indices_to_text(seq) for seq in noisy.cpu().tolist()]
-            predicted_texts = [dataset.indices_to_text(seq) for seq in predictions.cpu().tolist()]
-            target_texts = [dataset.indices_to_text(seq) for seq in clean.cpu().tolist()]
+            # Convert predictions and targets to text
+            pred_texts = [dataset.indices_to_text(p.cpu().tolist()) for p in predictions]
+            target_texts = [dataset.indices_to_text(t.cpu().tolist()) for t in clean]
 
-            for i in range(len(noisy_texts)):
-                lev_dist = levenshtein_distance(predicted_texts[i], target_texts[i])
-                bleu_score = sentence_bleu(
-                    [list(target_texts[i])],
-                    list(predicted_texts[i]),
-                    smoothing_function=smoother
-                ) * 100
-                is_correct = 1 if predicted_texts[i] == target_texts[i] else 0
+            # Calculate metrics
+            # Character accuracy
+            char_correct = sum(
+                sum(p == t for p, t in zip(pred, target))
+                for pred, target in zip(pred_texts, target_texts)
+            )
+            total_chars = sum(len(t) for t in target_texts)
+            val_metrics['char_accuracy'] += char_correct / total_chars if total_chars > 0 else 0
 
-                total_levenshtein += lev_dist
-                total_bleu += bleu_score
-                total_correct += is_correct
-                total_samples += 1
+            # End character accuracy
+            end_char_correct = sum(
+                pred[-1] == target[-1] if pred and target else False
+                for pred, target in zip(pred_texts, target_texts)
+            )
+            val_metrics['end_char_accuracy'] += end_char_correct / len(target_texts)
 
-                results.append({
-                    "noisy": noisy_texts[i],
-                    "predicted": predicted_texts[i],
-                    "target": target_texts[i],
-                    "levenshtein_distance": lev_dist,
-                    "bleu_score": bleu_score
-                })
+            # Length accuracy
+            length_match = sum(
+                len(pred) == len(target)
+                for pred, target in zip(pred_texts, target_texts)
+            )
+            val_metrics['length_accuracy'] += length_match / len(target_texts)
 
-    avg_lev_dist = total_levenshtein / total_samples
-    avg_bleu = total_bleu / total_samples
-    accuracy = (total_correct / total_samples) * 100
+            # Levenshtein distance
+            lev_distances = [
+                levenshtein_distance(pred, target)
+                for pred, target in zip(pred_texts, target_texts)
+            ]
+            val_metrics['levenshtein'] += sum(lev_distances) / len(lev_distances)
 
-    print("\nValidation Results:")
-    print(f"Avg Levenshtein Distance: {avg_lev_dist:.2f}")
-    print(f"Avg BLEU Score: {avg_bleu:.2f}%")
-    print(f"Accuracy: {accuracy:.2f}%")
+            # Exact matches
+            exact_matches = sum(p == t for p, t in zip(pred_texts, target_texts))
+            val_metrics['exact_matches'] += exact_matches / len(target_texts)
 
-    with open("../reports/validation_results.json", "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=4, ensure_ascii=False)
+            # Store predictions and targets
+            all_predictions.extend(pred_texts)
+            all_targets.extend(target_texts)
 
-    print("\n🔍 Результати збережено у `./reports/validation_results.json`")
+            # Update error distributions
+            for pred, target in zip(pred_texts, target_texts):
+                if pred != target:
+                    error_type = categorize_error(pred, target)
+                    error_distributions[error_type] += 1
 
-    return avg_lev_dist, avg_bleu, accuracy
+            num_batches += 1
 
-def analyze_error_distribution(results):
-    error_types = defaultdict(int)
-    error_examples = defaultdict(list)
+    # Average metrics
+    for key in val_metrics:
+        val_metrics[key] /= num_batches
 
-    for result in results:
-        if not result['is_correct']:
-            noisy = result['noisy']
-            corrected = result['corrected']
-            expected = result['expected']
+    return val_metrics, error_distributions, (all_predictions, all_targets)
 
-            if len(corrected) != len(expected):
-                error_type = 'length_mismatch'
-            elif all(c == 'p' for c in corrected):
-                error_type = 'p_repetition'
-            elif corrected[0] != expected[0]:
-                error_type = 'first_char_error'
-            elif levenshtein_distance(corrected, expected) == 1:
-                error_type = 'single_char_error'
-            else:
-                error_type = 'multiple_errors'
 
-            error_types[error_type] += 1
-            error_examples[error_type].append({
-                'noisy': noisy,
-                'corrected': corrected,
-                'expected': expected
-            })
+def analyze_error_distribution(
+        predictions: List[str],
+        targets: List[str],
+        save_dir: Optional[str] = None
+) -> Tuple[Dict[str, float], Dict[str, List[Tuple[str, str]]]]:
+    """Analyze error distribution in model predictions"""
+    error_analysis = defaultdict(int)
+    error_details = defaultdict(list)
 
-    return dict(error_types), dict(error_examples)
+    for pred, target in zip(predictions, targets):
+        if pred != target:
+            # Categorize error
+            error_type = categorize_error(pred, target)
+            error_analysis[error_type] += 1
+            error_details[error_type].append((target, pred))
+
+    # Calculate percentages
+    total_errors = sum(error_analysis.values())
+    error_distribution = {
+        k: (v / total_errors * 100) if total_errors > 0 else 0
+        for k, v in error_analysis.items()
+    }
+
+    if save_dir:
+        os.makedirs(save_dir, exist_ok=True)
+        save_error_analysis(error_distribution, error_details, save_dir)
+
+    return error_distribution, error_details
+
+
+def save_prediction_examples(
+        predictions: List[str],
+        targets: List[str],
+        output_file: str,
+        max_examples: int = 50
+):
+    """Save prediction examples to file"""
+    with open(output_file, 'w') as f:
+        f.write("PREDICTION EXAMPLES:\n")
+        f.write("-" * 60 + "\n")
+
+        for target, pred in list(zip(targets, predictions))[:max_examples]:
+            f.write(f"Target: {target}\n")
+            f.write(f"Pred  : {pred}\n")
+            if target != pred:
+                f.write(f"Error Type: {categorize_error(pred, target)}\n")
+                f.write(f"Levenshtein: {levenshtein_distance(pred, target)}\n")
+            f.write("-" * 60 + "\n")
+
+
+def save_error_analysis(
+        error_distribution: Dict[str, float],
+        error_details: Dict[str, List[Tuple[str, str]]],
+        save_dir: str
+):
+    """Save error analysis results"""
+    # Save error distribution plot
+    plt.figure(figsize=(12, 6))
+
+    sorted_errors = sorted(
+        error_distribution.items(),
+        key=lambda x: x[1],
+        reverse=True
+    )
+    labels, values = zip(*sorted_errors)
+
+    plt.bar(labels, values)
+    plt.xticks(rotation=45, ha='right')
+    plt.title('Error Type Distribution')
+    plt.ylabel('Percentage of Errors')
+    plt.tight_layout()
+
+    plt.savefig(os.path.join(save_dir, 'error_distribution.png'))
+    plt.close()
+
+    # Save error examples
+    with open(os.path.join(save_dir, 'error_examples.txt'), 'w') as f:
+        for error_type, examples in error_details.items():
+            f.write(f"\n{error_type.upper()} ERRORS:\n")
+            f.write("-" * 60 + "\n")
+
+            for target, pred in examples[:10]:  # Show first 10 examples of each type
+                f.write(f"Target: {target}\n")
+                f.write(f"Pred  : {pred}\n")
+                f.write(f"Levenshtein: {levenshtein_distance(pred, target)}\n")
+                f.write("-" * 60 + "\n")
+
+
+def categorize_error(pred: str, target: str) -> str:
+    """Categorize the type of error based on prediction and target"""
+    if len(pred) != len(target):
+        if len(pred) < len(target):
+            return 'truncation'
+        return 'expansion'
+
+    diff_chars = sum(p != t for p, t in zip(pred, target))
+    if diff_chars == 1:
+        return 'single_char'
+
+    if len(pred) >= 2 and len(target) >= 2:
+        transpositions = sum(
+            pred[i:i + 2] == target[i + 1] + target[i]
+            for i in range(len(pred) - 1)
+        )
+        if transpositions > 0:
+            return 'transposition'
+
+    if pred[:-1] == target[:-1] and pred[-1] != target[-1]:
+        return 'end_char'
+
+    return 'complex'
 
 def main():
     config = {
-        'model_path': '../models/dae_best_checkpoint',
-        'dataset_path': '../data/dae_dataset.csv',
+        'model_path': './models/dae_best_checkpoint',
         'batch_size':  128,
         'device': 'cuda' if torch.cuda.is_available() else 'cpu',
 
     }
-    dataset = TextDataset(config['dataset_path'])
 
     model, metadata = load_checkpoint_distributed(
         config['model_path'],
@@ -135,61 +372,20 @@ def main():
     )
     model.eval()
 
-    val_loader = DataLoader(
-        dataset,
-        batch_size=config['batch_size'],
-        shuffle=False,
-        collate_fn=pad_collate_fn,
-        num_workers=4,
-        pin_memory=True,
-        drop_last=True
+    curriculum_datasets = {
+        'easy': TextDataset('./data/curriculum_datasets/dae_dataset_easy.csv'),
+        'medium': TextDataset('./data/curriculum_datasets/dae_dataset_medium.csv'),
+        'hard': TextDataset('./data/curriculum_datasets/dae_dataset_hard.csv')
+    }
+
+    # Validate model across all difficulty levels
+    results = validate_curriculum_model(
+        model,
+        curriculum_datasets,
+        batch_size=64,
+        device="cuda",
+        save_dir="./reports/validation_results"
     )
-    validate_model(model, val_loader, dataset, config['device'])
-
-    validator = ModelValidator(model, metadata['char_to_idx'], metadata['idx_to_char'], config['device'])
-
-    validator.run_validation_suite()
-
-    results = validator.validate_on_test_cases([
-        ("samung", "samsung"),
-        ("aplple", "apple"),
-        ("galxy", "galaxy"),
-        ("nkia", "nokia"),
-        ("xiomi", "xiaomi"),
-        ("opppo", "oppo"),
-        ("vivo", "vivo"),
-        ("hwuaei", "huawei"),
-        ("readmi", "redmi"),
-        ("ulta", "ultra"),
-        ("proo", "pro"),
-        ("max", "max"),
-        ("pluss", "plus"),
-        ("lite", "lite"),
-        ("nokua", "nokia"),
-        ("sansung", "samsung"),
-        ("realne", "realme"),
-        ("galaxxy", "galaxy"),
-        ("iphonne", "iphone"),
-        ("xiaaomi", "xiaomi")
-    ])
-
-    error_types, error_examples = analyze_error_distribution(results['detailed_results'])
-
-    for error_type, count in error_types.items():
-        logger.info(f"{error_type}: {count} occurrences")
-        logger.info("Examples:")
-        for example in error_examples[error_type][:3]:
-            logger.info(f"  {example['noisy']} -> {example['corrected']} (expected: {example['expected']})")
-
-    results_file = '../reports/additional_validation_results.json'
-    with open(results_file, 'w') as f:
-        json.dump({
-            'results': results,
-            'error_analysis': {
-                'types': error_types,
-                'examples': error_examples
-            }
-        }, f, indent=2)
 
 if __name__ == "__main__":
     main()

@@ -1,8 +1,8 @@
 import torch
-from torch.utils.data import DataLoader
-from src.dae_trainer import DAETrainer
-from src.early_stopping import EarlyStopping
-from text_dataset import TextDataset, pad_collate_fn
+
+from analyze_curriculum_metrics import analyze_curriculum_metrics
+from curriculum_trainer import CurriculumTrainer
+from text_dataset import TextDataset
 from dae import DAE
 import logging
 import os
@@ -29,12 +29,8 @@ def main():
         'max_grad_norm': 1.0,
         'use_amp': True,
 
-        'save_dir': '../models',
-        'dataset_path': '../data/dae_dataset.csv',
-        'log_interval': 10,
-
+        'save_dir': './models',
         'val_interval': 100,
-        'plot_interval': 500,
 
          'optimizer': {
             'betas': (0.9, 0.98),
@@ -55,31 +51,10 @@ def main():
 
     os.makedirs(config['save_dir'], exist_ok=True)
 
-    dataset = TextDataset(config['dataset_path'])
-    config['pad_idx'] = dataset.char_to_idx['<PAD>']
-
-    train_loader = DataLoader(
-        dataset,
-        batch_size=config['batch_size'],
-        shuffle=True,
-        collate_fn=pad_collate_fn,
-        num_workers=4,
-        pin_memory=True,
-        drop_last=True
-    )
-
-    val_loader = DataLoader(
-        dataset,
-        batch_size=config['batch_size'],
-        shuffle=False,
-        collate_fn=pad_collate_fn,
-        num_workers=4,
-        pin_memory=True,
-        drop_last=True
-    )
+    config['pad_idx'] = 0
 
     model = DAE(
-        vocab_size=dataset.vocab_size,
+        vocab_size=29,
         d_model=config['d_model'],
         num_heads=config['num_heads'],
         num_layers=config['num_layers'],
@@ -89,33 +64,23 @@ def main():
         max_len=config['max_len']
     ).to(device)
 
-    trainer = DAETrainer(
+    curriculum_datasets = {
+        'easy': './data/curriculum_datasets/dae_dataset_easy.csv',
+        'medium': './data/curriculum_datasets/dae_dataset_medium.csv',
+        'hard': './data/curriculum_datasets/dae_dataset_hard.csv'
+    }
+
+    curriculum_trainer = CurriculumTrainer(
         model=model,
-        dataset=dataset,
-        config=config
+        base_config=config,
+        curriculum_datasets=curriculum_datasets
     )
 
-    early_stopping = EarlyStopping(patience=config['patience'])
+    metrics = curriculum_trainer.train_curriculum()
 
-    for epoch in range(config['max_epochs']):
-        train_metrics = trainer.train_epoch(train_loader)
-        val_metrics = trainer.validate(val_loader)
-
-        logger.info(f'Epoch {epoch + 1}/{config["max_epochs"]} - '
-                    f'Train Loss: {val_metrics["train_loss"]:.4f}, '
-                    f'Val Loss: {val_metrics["val_loss"]:.4f}')
-
-        trainer.save_checkpoint(
-            config['save_dir'],
-            epoch,
-            {**train_metrics, **val_metrics}
-        )
-        print(val_metrics)
-        if early_stopping(val_metrics, epoch):
-            logger.info(f'Early stopping at epoch {epoch}. Best Score: {early_stopping.best_composite_score:.4f}')
-            break
-
-    trainer.plot_metrics(config['save_dir'])
+    save_dir = './reports'
+    summary = analyze_curriculum_metrics(metrics, save_dir)
+    print("Summary Report:", summary)
 
 
 if __name__ == "__main__":

@@ -3,12 +3,11 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 import logging
 import os
-from src.dae_loss import DAELoss
+from dae_loss import DAELoss
 from text_dataset import TextDataset
 from train_monitor import TrainingMonitor
 from warmup_cosine_scheduler import WarmupCosineScheduler
-from collections import defaultdict
-from typing import Dict, Tuple, Any
+from typing import Dict, Any
 from model_save_utils import save_checkpoint_distributed
 
 
@@ -22,7 +21,6 @@ class DAETrainer:
 
         self.criterion = DAELoss(
             pad_idx=dataset.char_to_idx['<PAD>'],
-            end_weight=2.0
         )
 
         if hasattr(model, 'get_layer_wise_learning_rates'):
@@ -56,8 +54,6 @@ class DAETrainer:
     def train_epoch(self, train_loader: DataLoader) -> Dict[str, float]:
         """Train for one epoch."""
         self.model.train()
-        epoch_stats = defaultdict(float)
-        num_batches = 0
 
         for batch_idx, (noisy, clean) in enumerate(train_loader):
             try:
@@ -66,7 +62,7 @@ class DAETrainer:
                 with torch.amp.autocast('cuda', enabled=self.config['use_amp']):
                     output = self.model(noisy)
 
-                    loss, loss_components = self.criterion(output, clean)
+                    loss, loss_components = self.criterion(output, clean, self.config['phase_name'])
 
                 self.optimizer.zero_grad()
                 self.scaler.scale(loss).backward()
@@ -88,11 +84,6 @@ class DAETrainer:
                     clean,
                     phase='train'
                 )
-                self.monitor.log_gradients()
-
-                for key, value in loss_components.items():
-                    epoch_stats[key] += value
-                num_batches += 1
 
                 if batch_idx % self.config['val_interval'] == 0:
                     self._adjust_training_parameters(loss_components)
@@ -100,14 +91,12 @@ class DAETrainer:
             except Exception as e:
                 logging.error(f"Error in batch {batch_idx}: {str(e)}")
                 continue
-        self.monitor.epoch_end()
-        return {k: v / num_batches for k, v in epoch_stats.items()}
+
+        return self.monitor.epoch_end()
 
     def validate(self, val_loader: DataLoader) -> Dict[str, float]:
         """Validate the model."""
         self.model.eval()
-        val_stats = defaultdict(float)
-        num_batches = 0
 
         with torch.no_grad():
             for noisy, clean in val_loader:
@@ -115,7 +104,7 @@ class DAETrainer:
 
                 output = self.model(noisy)
 
-                loss, loss_components = self.criterion(output, clean)
+                loss, loss_components = self.criterion(output, clean, self.config['phase_name'])
                 predictions = output.argmax(dim=-1)
                 self.monitor.log_batch_metrics(
                     loss_components,
@@ -124,25 +113,14 @@ class DAETrainer:
                     phase='val'
                 )
 
-                for key, value in loss_components.items():
-                    val_stats[key] += value
-                num_batches += 1
-        self.monitor.epoch_end()
-        metrics = self.monitor.get_latest_metrics()
+        return self.monitor.epoch_end()
 
-        if self.config.get('plot_interval'):
-            self.monitor.plot_all_metrics(
-                os.path.join(self.config['save_dir'], 'training_progress.png')
-            )
-
-        return metrics
-
-    def save_checkpoint(self, save_dir: str, epoch: int, metrics: Dict):
+    def save_checkpoint(self, save_dir: str, epoch: int, train_metrics: Dict, val_metrics: Dict):
         """Save model checkpoint."""
         os.makedirs(save_dir, exist_ok=True)
 
-        if (metrics['combined_loss'] < self.best_val_loss):
-            self.best_val_loss = metrics['combined_loss']
+        if (val_metrics['loss'] < self.best_val_loss):
+            self.best_val_loss = val_metrics['loss']
             best_checkpoint_path = os.path.join(save_dir, 'dae_best_checkpoint')
             save_checkpoint_distributed(
                 self.model,
@@ -151,26 +129,11 @@ class DAETrainer:
                 self.dataset.idx_to_char,
                 {
                     'epoch': epoch,
-                    'metrics': metrics,
+                    'train_metrics': train_metrics,
+                    'val_metrics': val_metrics,
                     'vocab_size': self.dataset.vocab_size,
                 }
             )
-
-        if self.monitor:
-            self.monitor.plot_all_metrics(os.path.join(save_dir, 'training_metrics.png'))
-            self.monitor.analyze_attention(os.path.join(save_dir, 'attention_patterns.png'))
-
-    def plot_metrics(self, save_dir: str):
-        """Plot training metrics."""
-        metrics_to_plot = [
-            ('loss', ['train_loss', 'val_loss']),
-            ('accuracy', ['train_accuracy', 'val_accuracy']),
-            ('levenshtein', ['train_levenshtein', 'val_levenshtein']),
-            ('exact_matches', ['train_exact_matches', 'val_exact_matches'])
-        ]
-        for metric, keys in metrics_to_plot:
-            self.monitor.plot_metrics(os.path.join(save_dir, f'{metric}_plot.png'), keys)
-
 
     def _adjust_training_parameters(self, loss_components: Dict[str, float]):
         """Dynamically adjust training parameters based on loss components."""

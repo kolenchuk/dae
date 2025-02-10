@@ -1,7 +1,7 @@
 import pandas as pd
 
-unique_words_path = '../data/unique_words.txt'
-data_phones_path = '../data/data_phones_unique_words.csv'
+unique_words_path = './data/unique_words.txt'
+data_phones_path = './data/data_phones_unique_words.csv'
 
 with open(unique_words_path, 'r') as file:
     unique_words = set(file.read().splitlines())

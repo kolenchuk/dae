@@ -125,7 +125,7 @@ def search(query: str):
     corrected_query = correct_query_with_dae(query)
     logger.info(f"Corrected query with dae: {corrected_query}")
     if corrected_query["has_uncorrected"]:
-        corrected_query = correct_query_with_bart(query)
+        corrected_query = correct_query_with_bart(corrected_query["corrected"])
         logger.info(f"Corrected query with bart: {corrected_query}")
 
     suggestions = get_suggestions(corrected_query["corrected"])

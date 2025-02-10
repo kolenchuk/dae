@@ -1,5 +1,5 @@
 {
-    "save_dir": "../models/dae_best_checkpoint",
+    "save_dir": "models/dae_best_checkpoint",
     "char_to_idx": {
         "<PAD>": 0,
         "<EOS>": 1,

@@ -1,0 +1,215 @@
+
+EXPANSION ERRORS:
+------------------------------------------------------------
+Target: heavy
+Pred  : heavys
+Levenshtein: 1
+------------------------------------------------------------
+Target: asha
+Pred  : ashao
+Levenshtein: 1
+------------------------------------------------------------
+Target: esim
+Pred  : esime
+Levenshtein: 1
+------------------------------------------------------------
+Target: cams
+Pred  : cavir
+Levenshtein: 3
+------------------------------------------------------------
+Target: read
+Pred  : reawa
+Levenshtein: 2
+------------------------------------------------------------
+Target: intercom
+Pred  : intercomt
+Levenshtein: 1
+------------------------------------------------------------
+Target: fall
+Pred  : falls
+Levenshtein: 1
+------------------------------------------------------------
+Target: fairphone
+Pred  : fairphonee
+Levenshtein: 1
+------------------------------------------------------------
+Target: apple
+Pred  : appleyy
+Levenshtein: 2
+------------------------------------------------------------
+Target: cheap
+Pred  : cheaph
+Levenshtein: 1
+------------------------------------------------------------
+
+SINGLE_CHAR ERRORS:
+------------------------------------------------------------
+Target: interface
+Pred  : ineerface
+Levenshtein: 1
+------------------------------------------------------------
+Target: azerty
+Pred  : aeerty
+Levenshtein: 1
+------------------------------------------------------------
+Target: gravel
+Pred  : gaavel
+Levenshtein: 1
+------------------------------------------------------------
+Target: shock
+Pred  : shick
+Levenshtein: 1
+------------------------------------------------------------
+Target: sensing
+Pred  : zensing
+Levenshtein: 1
+------------------------------------------------------------
+Target: separation
+Pred  : sepalation
+Levenshtein: 1
+------------------------------------------------------------
+Target: walking
+Pred  : walling
+Levenshtein: 1
+------------------------------------------------------------
+Target: hypermobile
+Pred  : nypermobile
+Levenshtein: 1
+------------------------------------------------------------
+Target: lagoon
+Pred  : laaoon
+Levenshtein: 1
+------------------------------------------------------------
+Target: colour
+Pred  : solour
+Levenshtein: 1
+------------------------------------------------------------
+
+COMPLEX ERRORS:
+------------------------------------------------------------
+Target: garmin
+Pred  : aargin
+Levenshtein: 2
+------------------------------------------------------------
+Target: twilight
+Pred  : tellieht
+Levenshtein: 3
+------------------------------------------------------------
+Target: heitign
+Pred  : higtign
+Levenshtein: 2
+------------------------------------------------------------
+Target: writing
+Pred  : witting
+Levenshtein: 2
+------------------------------------------------------------
+Target: easy
+Pred  : veay
+Levenshtein: 2
+------------------------------------------------------------
+Target: absorption
+Pred  : kasorpttln
+Levenshtein: 4
+------------------------------------------------------------
+Target: decorate
+Pred  : docotate
+Levenshtein: 2
+------------------------------------------------------------
+Target: material
+Pred  : teterial
+Levenshtein: 2
+------------------------------------------------------------
+Target: isolated
+Pred  : iaalated
+Levenshtein: 2
+------------------------------------------------------------
+Target: management
+Pred  : lahagement
+Levenshtein: 2
+------------------------------------------------------------
+
+TRUNCATION ERRORS:
+------------------------------------------------------------
+Target: astral
+Pred  : tstra
+Levenshtein: 2
+------------------------------------------------------------
+Target: units
+Pred  : unit
+Levenshtein: 1
+------------------------------------------------------------
+Target: vibration
+Pred  : vartion
+Levenshtein: 3
+------------------------------------------------------------
+Target: jaune
+Pred  : aeun
+Levenshtein: 3
+------------------------------------------------------------
+Target: separate
+Pred  : separ
+Levenshtein: 3
+------------------------------------------------------------
+Target: adapts
+Pred  : apate
+Levenshtein: 3
+------------------------------------------------------------
+Target: marmerdo
+Pred  : ammeord
+Levenshtein: 4
+------------------------------------------------------------
+Target: oxygen
+Pred  : vlygn
+Levenshtein: 3
+------------------------------------------------------------
+Target: yoidesu
+Pred  : hodess
+Levenshtein: 3
+------------------------------------------------------------
+Target: fluent
+Pred  : ylue
+Levenshtein: 3
+------------------------------------------------------------
+
+TRANSPOSITION ERRORS:
+------------------------------------------------------------
+Target: waterproof
+Pred  : tawerproof
+Levenshtein: 2
+------------------------------------------------------------
+Target: ukmobileaccessories
+Pred  : qumobileaccessories
+Levenshtein: 2
+------------------------------------------------------------
+Target: scratchproof
+Pred  : scrttphproof
+Levenshtein: 2
+------------------------------------------------------------
+Target: sennheiser
+Pred  : sennoerere
+Levenshtein: 4
+------------------------------------------------------------
+Target: simpleextre
+Pred  : simeleeutre
+Levenshtein: 2
+------------------------------------------------------------
+Target: fitness
+Pred  : higness
+Levenshtein: 2
+------------------------------------------------------------
+Target: running
+Pred  : runnonm
+Levenshtein: 2
+------------------------------------------------------------
+Target: student
+Pred  : uuteent
+Levenshtein: 4
+------------------------------------------------------------
+Target: hspa
+Pred  : heap
+Levenshtein: 3
+------------------------------------------------------------
+Target: fannay
+Pred  : fanany
+Levenshtein: 2
+------------------------------------------------------------

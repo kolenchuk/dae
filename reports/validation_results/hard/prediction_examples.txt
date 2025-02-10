@@ -1,0 +1,222 @@
+PREDICTION EXAMPLES:
+------------------------------------------------------------
+Target: heavy
+Pred  : heavys
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: lbec
+Pred  : lbec
+------------------------------------------------------------
+Target: asha
+Pred  : ashao
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: interface
+Pred  : ineerface
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: zoom
+Pred  : zoom
+------------------------------------------------------------
+Target: azerty
+Pred  : aeerty
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: pisa
+Pred  : pisa
+------------------------------------------------------------
+Target: gravel
+Pred  : gaavel
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: shock
+Pred  : shick
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: garmin
+Pred  : aargin
+Error Type: complex
+Levenshtein: 2
+------------------------------------------------------------
+Target: loaded
+Pred  : loaded
+------------------------------------------------------------
+Target: astral
+Pred  : tstra
+Error Type: truncation
+Levenshtein: 2
+------------------------------------------------------------
+Target: sensing
+Pred  : zensing
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: activation
+Pred  : activation
+------------------------------------------------------------
+Target: esim
+Pred  : esime
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: cams
+Pred  : cavir
+Error Type: expansion
+Levenshtein: 3
+------------------------------------------------------------
+Target: twilight
+Pred  : tellieht
+Error Type: complex
+Levenshtein: 3
+------------------------------------------------------------
+Target: separation
+Pred  : sepalation
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: gaeirt
+Pred  : gaeirt
+------------------------------------------------------------
+Target: heitign
+Pred  : higtign
+Error Type: complex
+Levenshtein: 2
+------------------------------------------------------------
+Target: walking
+Pred  : walling
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: hypermobile
+Pred  : nypermobile
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: riznbl
+Pred  : riznbl
+------------------------------------------------------------
+Target: lagoon
+Pred  : laaoon
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: units
+Pred  : unit
+Error Type: truncation
+Levenshtein: 1
+------------------------------------------------------------
+Target: writing
+Pred  : witting
+Error Type: complex
+Levenshtein: 2
+------------------------------------------------------------
+Target: deca
+Pred  : deca
+------------------------------------------------------------
+Target: colour
+Pred  : solour
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: tethering
+Pred  : tettering
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: photograph
+Pred  : photograph
+------------------------------------------------------------
+Target: replace
+Pred  : replace
+------------------------------------------------------------
+Target: vibration
+Pred  : vartion
+Error Type: truncation
+Levenshtein: 3
+------------------------------------------------------------
+Target: gaffer
+Pred  : gafver
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: read
+Pred  : reawa
+Error Type: expansion
+Levenshtein: 2
+------------------------------------------------------------
+Target: jaune
+Pred  : aeun
+Error Type: truncation
+Levenshtein: 3
+------------------------------------------------------------
+Target: blackvue
+Pred  : blackvue
+------------------------------------------------------------
+Target: included
+Pred  : included
+------------------------------------------------------------
+Target: separate
+Pred  : separ
+Error Type: truncation
+Levenshtein: 3
+------------------------------------------------------------
+Target: easy
+Pred  : veay
+Error Type: complex
+Levenshtein: 2
+------------------------------------------------------------
+Target: tech
+Pred  : tece
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: absorption
+Pred  : kasorpttln
+Error Type: complex
+Levenshtein: 4
+------------------------------------------------------------
+Target: caterpillar
+Pred  : caterpillar
+------------------------------------------------------------
+Target: oikabio
+Pred  : oikaaio
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: waterproof
+Pred  : tawerproof
+Error Type: transposition
+Levenshtein: 2
+------------------------------------------------------------
+Target: intercom
+Pred  : intercomt
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: huntgold
+Pred  : huntgold
+------------------------------------------------------------
+Target: fall
+Pred  : falls
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: entertainment
+Pred  : entertainment
+------------------------------------------------------------
+Target: mccs
+Pred  : tccs
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: decorate
+Pred  : docotate
+Error Type: complex
+Levenshtein: 2
+------------------------------------------------------------

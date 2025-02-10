@@ -1,0 +1,215 @@
+
+EXPANSION ERRORS:
+------------------------------------------------------------
+Target: contains
+Pred  : containsn
+Levenshtein: 1
+------------------------------------------------------------
+Target: stopwatch
+Pred  : stopwatchs
+Levenshtein: 1
+------------------------------------------------------------
+Target: mist
+Pred  : mistnn
+Levenshtein: 2
+------------------------------------------------------------
+Target: stationary
+Pred  : stationaryyy
+Levenshtein: 2
+------------------------------------------------------------
+Target: jiaheng
+Pred  : jiahengt
+Levenshtein: 1
+------------------------------------------------------------
+Target: tones
+Pred  : toness
+Levenshtein: 1
+------------------------------------------------------------
+Target: goshyda
+Pred  : goshydan
+Levenshtein: 1
+------------------------------------------------------------
+Target: shortcut
+Pred  : shortcuts
+Levenshtein: 1
+------------------------------------------------------------
+Target: external
+Pred  : externall
+Levenshtein: 1
+------------------------------------------------------------
+Target: torch
+Pred  : torchrn
+Levenshtein: 2
+------------------------------------------------------------
+
+SINGLE_CHAR ERRORS:
+------------------------------------------------------------
+Target: airshi
+Pred  : arrshi
+Levenshtein: 1
+------------------------------------------------------------
+Target: satsleeve
+Pred  : satsleive
+Levenshtein: 1
+------------------------------------------------------------
+Target: backbeat
+Pred  : backbett
+Levenshtein: 1
+------------------------------------------------------------
+Target: dioche
+Pred  : diocee
+Levenshtein: 1
+------------------------------------------------------------
+Target: zunate
+Pred  : zuaate
+Levenshtein: 1
+------------------------------------------------------------
+Target: airtags
+Pred  : airtagt
+Levenshtein: 1
+------------------------------------------------------------
+Target: zodium
+Pred  : zodiom
+Levenshtein: 1
+------------------------------------------------------------
+Target: adjustable
+Pred  : adjustible
+Levenshtein: 1
+------------------------------------------------------------
+Target: barely
+Pred  : baaely
+Levenshtein: 1
+------------------------------------------------------------
+Target: lnglst
+Pred  : lngltt
+Levenshtein: 1
+------------------------------------------------------------
+
+TRUNCATION ERRORS:
+------------------------------------------------------------
+Target: charger
+Pred  : charge
+Levenshtein: 1
+------------------------------------------------------------
+Target: ndnczdhc
+Pred  : ndnczdc
+Levenshtein: 1
+------------------------------------------------------------
+Target: tritam
+Pred  : triia
+Levenshtein: 2
+------------------------------------------------------------
+Target: buttons
+Pred  : button
+Levenshtein: 1
+------------------------------------------------------------
+Target: walnut
+Pred  : waant
+Levenshtein: 2
+------------------------------------------------------------
+Target: caviar
+Pred  : cavir
+Levenshtein: 1
+------------------------------------------------------------
+Target: wooden
+Pred  : woodn
+Levenshtein: 1
+------------------------------------------------------------
+Target: kanredi
+Pred  : kanred
+Levenshtein: 1
+------------------------------------------------------------
+Target: nokosi
+Pred  : nokoi
+Levenshtein: 1
+------------------------------------------------------------
+Target: landlines
+Pred  : landline
+Levenshtein: 1
+------------------------------------------------------------
+
+COMPLEX ERRORS:
+------------------------------------------------------------
+Target: batery
+Pred  : bateye
+Levenshtein: 2
+------------------------------------------------------------
+Target: despicable
+Pred  : desiscable
+Levenshtein: 2
+------------------------------------------------------------
+Target: compact
+Pred  : company
+Levenshtein: 2
+------------------------------------------------------------
+Target: sierra
+Pred  : sidera
+Levenshtein: 2
+------------------------------------------------------------
+Target: cosmos
+Pred  : cosmic
+Levenshtein: 2
+------------------------------------------------------------
+Target: cardenal
+Pred  : cardents
+Levenshtein: 2
+------------------------------------------------------------
+Target: bracers
+Pred  : bracelt
+Levenshtein: 2
+------------------------------------------------------------
+Target: link
+Pred  : like
+Levenshtein: 2
+------------------------------------------------------------
+Target: protection
+Pred  : protective
+Levenshtein: 2
+------------------------------------------------------------
+Target: around
+Pred  : aoonnd
+Levenshtein: 2
+------------------------------------------------------------
+
+TRANSPOSITION ERRORS:
+------------------------------------------------------------
+Target: smarpthone
+Pred  : smartphone
+Levenshtein: 2
+------------------------------------------------------------
+Target: galaxy
+Pred  : glaaxy
+Levenshtein: 2
+------------------------------------------------------------
+Target: portable
+Pred  : protable
+Levenshtein: 2
+------------------------------------------------------------
+Target: bleu
+Pred  : blue
+Levenshtein: 2
+------------------------------------------------------------
+Target: friendly
+Pred  : firendly
+Levenshtein: 2
+------------------------------------------------------------
+Target: birthdays
+Pred  : brithdays
+Levenshtein: 2
+------------------------------------------------------------
+Target: vbestlife
+Pred  : vebstlife
+Levenshtein: 2
+------------------------------------------------------------
+Target: unlcok
+Pred  : unlock
+Levenshtein: 2
+------------------------------------------------------------
+Target: sliver
+Pred  : silver
+Levenshtein: 2
+------------------------------------------------------------
+Target: garsent
+Pred  : grasent
+Levenshtein: 2
+------------------------------------------------------------

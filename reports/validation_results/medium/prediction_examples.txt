@@ -1,0 +1,166 @@
+PREDICTION EXAMPLES:
+------------------------------------------------------------
+Target: snake
+Pred  : snake
+------------------------------------------------------------
+Target: kapok
+Pred  : kapok
+------------------------------------------------------------
+Target: headphones
+Pred  : headphones
+------------------------------------------------------------
+Target: contains
+Pred  : containsn
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: stopwatch
+Pred  : stopwatchs
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: nightfall
+Pred  : nightfall
+------------------------------------------------------------
+Target: packaging
+Pred  : packaging
+------------------------------------------------------------
+Target: cameras
+Pred  : cameras
+------------------------------------------------------------
+Target: extender
+Pred  : extender
+------------------------------------------------------------
+Target: plug
+Pred  : plug
+------------------------------------------------------------
+Target: babypone
+Pred  : babypone
+------------------------------------------------------------
+Target: navy
+Pred  : navy
+------------------------------------------------------------
+Target: record
+Pred  : record
+------------------------------------------------------------
+Target: plug
+Pred  : plug
+------------------------------------------------------------
+Target: edges
+Pred  : edges
+------------------------------------------------------------
+Target: pebble
+Pred  : pebble
+------------------------------------------------------------
+Target: glitter
+Pred  : glitter
+------------------------------------------------------------
+Target: rugerizado
+Pred  : rugerizado
+------------------------------------------------------------
+Target: party
+Pred  : party
+------------------------------------------------------------
+Target: mist
+Pred  : mistnn
+Error Type: expansion
+Levenshtein: 2
+------------------------------------------------------------
+Target: bentoben
+Pred  : bentoben
+------------------------------------------------------------
+Target: sonica
+Pred  : sonica
+------------------------------------------------------------
+Target: professional
+Pred  : professional
+------------------------------------------------------------
+Target: standby
+Pred  : standby
+------------------------------------------------------------
+Target: ornaments
+Pred  : ornaments
+------------------------------------------------------------
+Target: glory
+Pred  : glory
+------------------------------------------------------------
+Target: reverse
+Pred  : reverse
+------------------------------------------------------------
+Target: stationary
+Pred  : stationaryyy
+Error Type: expansion
+Levenshtein: 2
+------------------------------------------------------------
+Target: composite
+Pred  : composite
+------------------------------------------------------------
+Target: clothes
+Pred  : clothes
+------------------------------------------------------------
+Target: laptop
+Pred  : laptop
+------------------------------------------------------------
+Target: fitness
+Pred  : fitness
+------------------------------------------------------------
+Target: activation
+Pred  : activation
+------------------------------------------------------------
+Target: extended
+Pred  : extended
+------------------------------------------------------------
+Target: repairability
+Pred  : repairability
+------------------------------------------------------------
+Target: snowflake
+Pred  : snowflake
+------------------------------------------------------------
+Target: imager
+Pred  : imager
+------------------------------------------------------------
+Target: beautification
+Pred  : beautification
+------------------------------------------------------------
+Target: decked
+Pred  : decked
+------------------------------------------------------------
+Target: nanosim
+Pred  : nanosim
+------------------------------------------------------------
+Target: jiaheng
+Pred  : jiahengt
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: tones
+Pred  : toness
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: caller
+Pred  : caller
+------------------------------------------------------------
+Target: simplified
+Pred  : simplified
+------------------------------------------------------------
+Target: physical
+Pred  : physical
+------------------------------------------------------------
+Target: goshyda
+Pred  : goshydan
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: coresmartphone
+Pred  : coresmartphone
+------------------------------------------------------------
+Target: window
+Pred  : window
+------------------------------------------------------------
+Target: saving
+Pred  : saving
+------------------------------------------------------------
+Target: tabletop
+Pred  : tabletop
+------------------------------------------------------------

@@ -1,0 +1,215 @@
+
+EXPANSION ERRORS:
+------------------------------------------------------------
+Target: help
+Pred  : helpes
+Levenshtein: 2
+------------------------------------------------------------
+Target: change
+Pred  : changee
+Levenshtein: 1
+------------------------------------------------------------
+Target: external
+Pred  : externall
+Levenshtein: 1
+------------------------------------------------------------
+Target: smarpthone
+Pred  : smarpthoner
+Levenshtein: 1
+------------------------------------------------------------
+Target: cleaner
+Pred  : lleanerr
+Levenshtein: 2
+------------------------------------------------------------
+Target: msmga
+Pred  : msmgay
+Levenshtein: 1
+------------------------------------------------------------
+Target: celestial
+Pred  : celestialr
+Levenshtein: 1
+------------------------------------------------------------
+Target: smartfon
+Pred  : smartfons
+Levenshtein: 1
+------------------------------------------------------------
+Target: students
+Pred  : studentss
+Levenshtein: 1
+------------------------------------------------------------
+Target: backbeat
+Pred  : backbeate
+Levenshtein: 1
+------------------------------------------------------------
+
+TRUNCATION ERRORS:
+------------------------------------------------------------
+Target: adapters
+Pred  : adapter
+Levenshtein: 1
+------------------------------------------------------------
+Target: based
+Pred  : base
+Levenshtein: 1
+------------------------------------------------------------
+Target: covers
+Pred  : cores
+Levenshtein: 2
+------------------------------------------------------------
+Target: blood
+Pred  : loud
+Levenshtein: 2
+------------------------------------------------------------
+Target: watch
+Pred  : wtch
+Levenshtein: 1
+------------------------------------------------------------
+Target: gloss
+Pred  : loss
+Levenshtein: 1
+------------------------------------------------------------
+Target: elite
+Pred  : litt
+Levenshtein: 2
+------------------------------------------------------------
+Target: transparente
+Pred  : transparent
+Levenshtein: 1
+------------------------------------------------------------
+Target: smooth
+Pred  : mooth
+Levenshtein: 1
+------------------------------------------------------------
+Target: cross
+Pred  : cros
+Levenshtein: 1
+------------------------------------------------------------
+
+SINGLE_CHAR ERRORS:
+------------------------------------------------------------
+Target: backup
+Pred  : hackup
+Levenshtein: 1
+------------------------------------------------------------
+Target: pro-i
+Pred  : pro-e
+Levenshtein: 1
+------------------------------------------------------------
+Target: voice
+Pred  : vorce
+Levenshtein: 1
+------------------------------------------------------------
+Target: alta
+Pred  : llta
+Levenshtein: 1
+------------------------------------------------------------
+Target: warm
+Pred  : warr
+Levenshtein: 1
+------------------------------------------------------------
+Target: communications
+Pred  : nommunications
+Levenshtein: 1
+------------------------------------------------------------
+Target: unlcok
+Pred  : unlcck
+Levenshtein: 1
+------------------------------------------------------------
+Target: years
+Pred  : eears
+Levenshtein: 1
+------------------------------------------------------------
+Target: diamond
+Pred  : giamond
+Levenshtein: 1
+------------------------------------------------------------
+Target: multifunctional
+Pred  : multidunctional
+Levenshtein: 1
+------------------------------------------------------------
+
+COMPLEX ERRORS:
+------------------------------------------------------------
+Target: alcatel
+Pred  : cacatel
+Levenshtein: 2
+------------------------------------------------------------
+Target: tyrant
+Pred  : grrant
+Levenshtein: 2
+------------------------------------------------------------
+Target: scrunchies
+Pred  : curunchies
+Levenshtein: 2
+------------------------------------------------------------
+Target: unlocking
+Pred  : unoccking
+Levenshtein: 2
+------------------------------------------------------------
+Target: batery
+Pred  : battey
+Levenshtein: 2
+------------------------------------------------------------
+Target: mall
+Pred  : mate
+Levenshtein: 2
+------------------------------------------------------------
+Target: archery
+Pred  : earhery
+Levenshtein: 2
+------------------------------------------------------------
+Target: united
+Pred  : liited
+Levenshtein: 2
+------------------------------------------------------------
+Target: bags
+Pred  : ages
+Levenshtein: 2
+------------------------------------------------------------
+Target: texts
+Pred  : trets
+Levenshtein: 2
+------------------------------------------------------------
+
+TRANSPOSITION ERRORS:
+------------------------------------------------------------
+Target: crossbody
+Pred  : roossbody
+Levenshtein: 2
+------------------------------------------------------------
+Target: wireless
+Pred  : irreless
+Levenshtein: 2
+------------------------------------------------------------
+Target: orllo
+Pred  : bollo
+Levenshtein: 2
+------------------------------------------------------------
+Target: sierra
+Pred  : irerra
+Levenshtein: 2
+------------------------------------------------------------
+Target: folosafenar
+Pred  : floosafenar
+Levenshtein: 2
+------------------------------------------------------------
+Target: oppo
+Pred  : popo
+Levenshtein: 2
+------------------------------------------------------------
+Target: italia
+Pred  : tialia
+Levenshtein: 2
+------------------------------------------------------------
+Target: passport
+Pred  : asssport
+Levenshtein: 2
+------------------------------------------------------------
+Target: brilliant
+Pred  : riilliant
+Levenshtein: 2
+------------------------------------------------------------
+Target: overall
+Pred  : veerall
+Levenshtein: 2
+------------------------------------------------------------

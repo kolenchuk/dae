@@ -1,0 +1,190 @@
+PREDICTION EXAMPLES:
+------------------------------------------------------------
+Target: sticky
+Pred  : sticky
+------------------------------------------------------------
+Target: help
+Pred  : helpes
+Error Type: expansion
+Levenshtein: 2
+------------------------------------------------------------
+Target: inchessmartphone
+Pred  : inchessmartphone
+------------------------------------------------------------
+Target: adapters
+Pred  : adapter
+Error Type: truncation
+Levenshtein: 1
+------------------------------------------------------------
+Target: change
+Pred  : changee
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: bell
+Pred  : bell
+------------------------------------------------------------
+Target: external
+Pred  : externall
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: qwerty
+Pred  : qwerty
+------------------------------------------------------------
+Target: backup
+Pred  : hackup
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: refresh
+Pred  : refresh
+------------------------------------------------------------
+Target: shells
+Pred  : shells
+------------------------------------------------------------
+Target: basic
+Pred  : basic
+------------------------------------------------------------
+Target: yoidesu
+Pred  : yoidesu
+------------------------------------------------------------
+Target: office
+Pred  : office
+------------------------------------------------------------
+Target: rainbuvvy
+Pred  : rainbuvvy
+------------------------------------------------------------
+Target: amiibo
+Pred  : amiibo
+------------------------------------------------------------
+Target: full
+Pred  : full
+------------------------------------------------------------
+Target: atlantic
+Pred  : atlantic
+------------------------------------------------------------
+Target: portable
+Pred  : portable
+------------------------------------------------------------
+Target: smarpthone
+Pred  : smarpthoner
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: intrinsically
+Pred  : intrinsically
+------------------------------------------------------------
+Target: around
+Pred  : around
+------------------------------------------------------------
+Target: esim
+Pred  : esim
+------------------------------------------------------------
+Target: concha
+Pred  : concha
+------------------------------------------------------------
+Target: cleaner
+Pred  : lleanerr
+Error Type: expansion
+Levenshtein: 2
+------------------------------------------------------------
+Target: pro-i
+Pred  : pro-e
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: msmga
+Pred  : msmgay
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: support
+Pred  : support
+------------------------------------------------------------
+Target: noise
+Pred  : noise
+------------------------------------------------------------
+Target: voice
+Pred  : vorce
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: celestial
+Pred  : celestialr
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: helpdesk
+Pred  : helpdesk
+------------------------------------------------------------
+Target: energizer
+Pred  : energizer
+------------------------------------------------------------
+Target: razr
+Pred  : razr
+------------------------------------------------------------
+Target: alta
+Pred  : llta
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: smartfon
+Pred  : smartfons
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: kaios
+Pred  : kaios
+------------------------------------------------------------
+Target: ages
+Pred  : ages
+------------------------------------------------------------
+Target: cheap
+Pred  : cheap
+------------------------------------------------------------
+Target: tones
+Pred  : tones
+------------------------------------------------------------
+Target: wear
+Pred  : wear
+------------------------------------------------------------
+Target: students
+Pred  : studentss
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: backbeat
+Pred  : backbeate
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: interface
+Pred  : interfacet
+Error Type: expansion
+Levenshtein: 1
+------------------------------------------------------------
+Target: warm
+Pred  : warr
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: communications
+Pred  : nommunications
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: eyeglass
+Pred  : eyeglass
+------------------------------------------------------------
+Target: lead
+Pred  : lead
+------------------------------------------------------------
+Target: unlcok
+Pred  : unlcck
+Error Type: single_char
+Levenshtein: 1
+------------------------------------------------------------
+Target: tosuny
+Pred  : tosuny
+------------------------------------------------------------

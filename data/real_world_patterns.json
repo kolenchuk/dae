@@ -1,0 +1,56 @@
+{
+  "samsung": [
+    "samung",
+    "samsng",
+    "sumsang",
+    "samsum",
+    "sumsung"
+  ],
+  "xiaomi": [
+    "xiomi",
+    "xaomi",
+    "xiami",
+    "xiami"
+  ],
+  "iphone": [
+    "ipone",
+    "iphne",
+    "ifone",
+    "iphon"
+  ],
+  "huawei": [
+    "huawey",
+    "huwei",
+    "huawai",
+    "huawey",
+    "hwuaei"
+  ],
+  "realme": [
+    "realmi",
+    "relme",
+    "realm",
+    "realme"
+  ],
+  "nothing": [
+    "nothin",
+    "noting",
+    "noting"
+  ],
+  "oneplus": [
+    "onplus",
+    "1plus",
+    "oneplus"
+  ],
+  "apple": [
+    "aplple"
+  ],
+  "galaxy": [
+    "galxy"
+  ],
+  "nokia": [
+    "nkia"
+  ],
+  "motorola": [
+    "motorla"
+  ]
+}

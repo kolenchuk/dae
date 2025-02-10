@@ -1,0 +1,23 @@
+{
+    "phase1_metrics": {
+        "best_accuracy": 0.971509364668769,
+        "best_char_accuracy": 0.971509364668769,
+        "lowest_loss": 0.13234231686878084,
+        "lowest_levenshtein": 0.998392781986532,
+        "total_epochs": 40
+    },
+    "phase2_metrics": {
+        "best_accuracy": 0.9962657232704403,
+        "best_char_accuracy": 0.9962657232704403,
+        "lowest_loss": 0.1276007247561554,
+        "lowest_levenshtein": 0.39114091981132076,
+        "total_epochs": 48
+    },
+    "phase3_metrics": {
+        "best_accuracy": 0.996304381127451,
+        "best_char_accuracy": 0.996304381127451,
+        "lowest_loss": 0.1266014018351687,
+        "lowest_levenshtein": 0.49402278940422323,
+        "total_epochs": 60
+    }
+}

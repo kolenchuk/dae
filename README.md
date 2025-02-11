@@ -106,6 +106,7 @@ API буде доступне за адресою: [http://127.0.0.1:8000](http:
 ```bash
 curl -X 'GET' 'http://127.0.0.1:8001/search?query=iphnoe%2013%20pro' -H 'accept: application/json'
 ```
-
-
-
+Відповідь:
+```commandline
+{"original":"iphnoe 13 pro","search_variants":["apple iphone 13 pro","apple iphone 13 pro max","apple iphone 13 pro 256gb","apple iphone 13 pro max 256gb","apple iphone 13 pro max 1tb"]}
+```

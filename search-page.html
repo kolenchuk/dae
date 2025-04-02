@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartphone Model Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .search-box {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+            outline: none;
+        }
+        input[type="text"]:focus {
+            border-color: #4285f4;
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #3367d6;
+        }
+        .result-area {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .status {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .error {
+            color: #d32f2f;
+        }
+        .correction-info {
+            background-color: #e3f2fd;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2196f3;
+        }
+        .suggestions {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .suggestions li {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .suggestions li:hover {
+            background-color: #f5f5f5;
+        }
+        .suggestions li:last-child {
+            border-bottom: none;
+        }
+        .curl-example {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .note {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff8e1;
+            border-left: 4px solid #ffca28;
+            border-radius: 4px;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid transparent;
+            border-bottom: none;
+            margin-right: 5px;
+            border-radius: 4px 4px 0 0;
+        }
+        .tab.active {
+            background-color: white;
+            border-color: #ddd;
+            border-bottom-color: white;
+            margin-bottom: -1px;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Smartphone Model Search</h1>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Enter smartphone model..." value="iphnoe 13 pro">
+            <button id="searchButton">Search</button>
+        </div>
+        <div class="status" id="statusMessage"></div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="results">Search Results</div>
+            <div class="tab" data-tab="dae">DAE Correction</div>
+            <div class="tab" data-tab="bart">BART Correction</div>
+        </div>
+        
+        <div class="tab-content active" id="resultsTab">
+            <div class="correction-info" id="correctionInfo" style="display: none;">
+                <p>Original query: <strong id="originalQuery"></strong></p>
+                <p>Searched for: <strong id="correctedQuery"></strong></p>
+            </div>
+            <h3>Suggested Models:</h3>
+            <div class="result-area">
+                <ul class="suggestions" id="suggestionsList">
+                    <li>Results will appear here...</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="daeTab">
+            <h3>DAE Spelling Correction:</h3>
+            <div class="result-area">
+                <pre id="daeOutput">Results will appear here...</pre>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="bartTab">
+            <h3>BART Spelling Correction:</h3>
+            <div class="result-area">
+                <pre id="bartOutput">Results will appear here...</pre>
+            </div>
+        </div>
+        
+        <div class="note">
+            <strong>API Endpoints Used:</strong>
+            <ul>
+                <li><code>/search</code> - Main search with spelling correction</li>
+                <li><code>/correct_dae</code> - DAE model spelling correction</li>
+                <li><code>/correct_bart</code> - BART model spelling correction</li>
+            </ul>
+        </div>
+        
+        <div class="curl-example">
+            Example curl command:
+            <code id="curlExample">curl -X 'GET' 'http://127.0.0.1:8001/search?query=iphnoe%2013%20pro' -H 'accept: application/json'</code>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const statusMessage = document.getElementById('statusMessage');
+            const suggestionsList = document.getElementById('suggestionsList');
+            const daeOutput = document.getElementById('daeOutput');
+            const bartOutput = document.getElementById('bartOutput');
+            const correctionInfo = document.getElementById('correctionInfo');
+            const originalQuery = document.getElementById('originalQuery');
+            const correctedQuery = document.getElementById('correctedQuery');
+            const curlExample = document.getElementById('curlExample');
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Function to update the curl example
+            function updateCurlExample(query) {
+                const encodedQuery = encodeURIComponent(query);
+                curlExample.textContent = `curl -X 'GET' 'http://127.0.0.1:8001/search?query=${encodedQuery}' -H 'accept: application/json'`;
+            }
+            
+            // Switch tabs
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    document.getElementById(`${this.dataset.tab}Tab`).classList.add('active');
+                });
+            });
+            
+            // Function to handle API errors
+            function handleApiError(error, elementId) {
+                const element = document.getElementById(elementId);
+                if (error.message.includes('Failed to fetch')) {
+                    element.textContent = "CORS Error: Cannot connect to the API server.\n\nPossible solutions:\n1. Ensure your API server is running\n2. Enable CORS on your API server\n3. Try using the curl command shown below";
+                } else {
+                    element.textContent = `Error: ${error.message}`;
+                }
+                statusMessage.textContent = error.message;
+                statusMessage.classList.add('error');
+            }
+            
+            // Function to perform search
+            async function performSearch() {
+                const query = searchInput.value.trim();
+                
+                if (!query) {
+                    statusMessage.textContent = 'Please enter a search query';
+                    statusMessage.classList.add('error');
+                    return;
+                }
+                
+                updateCurlExample(query);
+                statusMessage.textContent = 'Searching...';
+                statusMessage.classList.remove('error');
+                
+                // Reset displays
+                suggestionsList.innerHTML = '<li>Loading...</li>';
+                daeOutput.textContent = 'Loading...';
+                bartOutput.textContent = 'Loading...';
+                correctionInfo.style.display = 'none';
+                
+                // Perform search
+                try {
+                    const searchResponse = await fetch(`http://127.0.0.1:8001/search?query=${encodeURIComponent(query)}`, {
+                        headers: {
+                            'accept': 'application/json'
+                        }
+                    });
+                    
+                    if (!searchResponse.ok) {
+                        throw new Error(`API error: ${searchResponse.status}`);
+                    }
+                    
+                    const searchData = await searchResponse.json();
+                    
+                    // Display search results
+                    if (searchData.search_variants && searchData.search_variants.length > 0) {
+                        suggestionsList.innerHTML = '';
+                        searchData.search_variants.forEach(model => {
+                            const li = document.createElement('li');
+                            li.textContent = model;
+                            li.addEventListener('click', () => {
+                                searchInput.value = model;
+                                performSearch();
+                            });
+                            suggestionsList.appendChild(li);
+                        });
+                    } else {
+                        suggestionsList.innerHTML = '<li>No matches found</li>';
+                    }
+                    
+                    // Show correction info if query was modified
+                    if (searchData.original !== searchData.corrected) {
+                        correctionInfo.style.display = 'block';
+                        originalQuery.textContent = searchData.original;
+                        correctedQuery.textContent = searchData.corrected;
+                    }
+                    
+                    statusMessage.textContent = 'Search completed';
+                } catch (error) {
+                    handleApiError(error, 'suggestionsList');
+                }
+                
+                // Perform DAE correction
+                try {
+                    const daeResponse = await fetch(`http://127.0.0.1:8001/correct_dae?query=${encodeURIComponent(query)}`, {
+                        headers: {
+                            'accept': 'application/json'
+                        }
+                    });
+                    
+                    if (!daeResponse.ok) {
+                        throw new Error(`API error: ${daeResponse.status}`);
+                    }
+                    
+                    const daeData = await daeResponse.json();
+                    daeOutput.textContent = JSON.stringify(daeData, null, 2);
+                } catch (error) {
+                    handleApiError(error, 'daeOutput');
+                }
+                
+                // Perform BART correction
+                try {
+                    const bartResponse = await fetch(`http://127.0.0.1:8001/correct_bart?query=${encodeURIComponent(query)}`, {
+                        headers: {
+                            'accept': 'application/json'
+                        }
+                    });
+                    
+                    if (!bartResponse.ok) {
+                        throw new Error(`API error: ${bartResponse.status}`);
+                    }
+                    
+                    const bartData = await bartResponse.json();
+                    bartOutput.textContent = JSON.stringify(bartData, null, 2);
+                } catch (error) {
+                    handleApiError(error, 'bartOutput');
+                }
+            }
+            
+            // Add event listeners
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Initialize with default search
+            updateCurlExample(searchInput.value);
+            searchInput.focus();
+        });
+    </script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import torch
 
 from src.dae import DAE
@@ -29,6 +30,13 @@ with open("./data/unique_words.txt", "r", encoding="utf-8") as f:
 SMARTPHONES = load_smartphone_models("./data/smartphones.csv")
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # For development only
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 MODEL_PATH = "./models/dae_best_checkpoint"
